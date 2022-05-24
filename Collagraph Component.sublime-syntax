@@ -199,19 +199,22 @@ contexts:
         - tag-id-attribute-meta
         - tag-id-attribute-equals
 
-  mustache-expression:
-    - match: (?={{)
-      set:
-        - meta_scope: meta.template.cgx
-        - match: '{{'
-          scope: punctuation.definition.template.begin.html
-          embed: scope:source.python
-          embed_scope: source.python.embedded.cgx
-          escape: '}}'
-          escape_captures:
-            0: meta.template.cgx punctuation.definition.template.end.html
-        - match: ''
-          pop: true
+  tag-style-attribute-value:
+    - match: '"'
+      scope: string.quoted.double punctuation.definition.string.begin.html
+      embed: scope:source.css#rule-list-body
+      embed_scope: source.css
+      escape: '"'
+      escape_captures:
+        0: string.quoted.double punctuation.definition.string.end.html
+    - match: "'"
+      scope: string.quoted.single punctuation.definition.string.begin.html
+      embed: scope:source.css#rule-list-body
+      embed_scope: source.css
+      escape: "'"
+      escape_captures:
+        0: string.quoted.single punctuation.definition.string.end.html
+    - include: else-pop
 
   tag-id-attribute-value:
     - match: '"'
@@ -237,13 +240,9 @@ contexts:
       pop: true
     - include: else-pop
 
-  style-common:
-    - include: style-lang-attribute
-
-    - include: style-type-attribute
-    - include: tag-attributes
-    - match: />
-      scope: punctuation.definition.tag.end.html
+  generic-attribute-name:
+    - meta_scope: entity.other.attribute-name.html
+    - match: (?!{{attribute_char}})
       pop: true
 
   template-lang-decider:
@@ -328,7 +327,7 @@ contexts:
         - tag-generic-attribute-value
     - match: (?i)(?=>|''|"")
       set:
-        - script-javascript
+        - script-python
         - tag-generic-attribute-meta
         - tag-generic-attribute-value
     - match: (?i)(?=text/html(?!{{unquoted_attribute_value}})|'text/html'|"text/html")
@@ -517,7 +516,7 @@ contexts:
         0: meta.tag.script.begin.html
         1: punctuation.definition.tag.begin.html
         2: entity.name.tag.script.html
-      push: script-javascript
+      push: script-python
     - match: (</?)((?i:body|head|html)\b)
       captures:
         1: punctuation.definition.tag.begin.html
@@ -696,11 +695,20 @@ contexts:
             - meta_content_scope: meta.tag.script.begin.html meta.attribute-with-value.html
             - include: script-type-decider
         - match: (?=\S)
-          set: script-javascript
+          set: script-python
 
   tag-generic-attribute-meta:
     - meta_scope: meta.attribute-with-value.html
     - include: immediately-pop
+
+  style-common:
+    - include: style-lang-attribute
+
+    - include: style-type-attribute
+    - include: tag-attributes
+    - match: />
+      scope: punctuation.definition.tag.end.html
+      pop: true
 
   style-other:
     - meta_content_scope: meta.tag.style.begin.html
@@ -853,22 +861,31 @@ contexts:
         - tag-generic-attribute-equals
         - generic-attribute-name
 
-  tag-style-attribute-value:
-    - match: '"'
-      scope: string.quoted.double punctuation.definition.string.begin.html
-      embed: scope:source.css#rule-list-body
-      embed_scope: source.css
-      escape: '"'
-      escape_captures:
-        0: string.quoted.double punctuation.definition.string.end.html
-    - match: "'"
-      scope: string.quoted.single punctuation.definition.string.begin.html
-      embed: scope:source.css#rule-list-body
-      embed_scope: source.css
-      escape: "'"
-      escape_captures:
-        0: string.quoted.single punctuation.definition.string.end.html
-    - include: else-pop
+  script-python:
+    - meta_content_scope: meta.tag.script.begin.html
+    - include: script-common
+    - match: '>'
+      scope: punctuation.definition.tag.end.html
+      set:
+        - include: script-close-tag
+        - match: (?=\S)
+          embed: scope:source.python
+          embed_scope: source.python.embedded.html
+          escape: (?i)(?=(?:-->\s*)?</script)
+
+  mustache-expression:
+    - match: (?={{)
+      set:
+        - meta_scope: meta.template.cgx
+        - match: '{{'
+          scope: punctuation.definition.template.begin.html
+          embed: scope:source.python
+          embed_scope: source.python.embedded.cgx
+          escape: '}}'
+          escape_captures:
+            0: meta.template.cgx punctuation.definition.template.end.html
+        - match: ''
+          pop: true
 
   template-common:
     - include: template-lang-attribute
@@ -877,15 +894,6 @@ contexts:
       scope: punctuation.definition.tag.end.html
       pop: true
 
-  string-double-quoted:
-    - match: '"'
-      scope: punctuation.definition.string.begin.html
-      push:
-        - meta_scope: string.quoted.double.html
-        - match: '"'
-          scope: punctuation.definition.string.end.html
-          pop: true
-        - include: entities
   style-css:
     - meta_content_scope: meta.tag.style.begin.html
     - include: style-common
@@ -915,11 +923,15 @@ contexts:
         1: punctuation.definition.entity.html
         3: punctuation.definition.entity.html
 
-  generic-attribute-name:
-    - meta_scope: entity.other.attribute-name.html
-    - match: (?!{{attribute_char}})
-      pop: true
-
+  string-double-quoted:
+    - match: '"'
+      scope: punctuation.definition.string.begin.html
+      push:
+        - meta_scope: string.quoted.double.html
+        - match: '"'
+          scope: punctuation.definition.string.end.html
+          pop: true
+        - include: entities
   script-javascript:
     - meta_content_scope: meta.tag.script.begin.html
     - include: script-common
