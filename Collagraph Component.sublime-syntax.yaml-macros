@@ -4,7 +4,7 @@
 !extend
 _base: HTML.yaml
 name: Collagraph Component
-scope: text.html.vue
+scope: text.html.cgx
 hidden: false
 file_extensions: [vue]
 
@@ -16,14 +16,14 @@ contexts: !merge
   mustache-expression:
     - match: '(?={{)'
       set:
-        - meta_scope: meta.template.vue
+        - meta_scope: meta.template.cgx
         - match: '{{'
           scope: punctuation.definition.template.begin.html
-          embed: scope:source.js
-          embed_scope: source.js.embedded.vue
+          embed: scope:source.python
+          embed_scope: source.python.embedded.cgx
           escape: '}}'
           escape_captures:
-            0: meta.template.vue punctuation.definition.template.end.html
+            0: meta.template.cgx punctuation.definition.template.end.html
         - match: ''
           pop: true
 
@@ -57,15 +57,15 @@ contexts: !merge
   js-string:
     - match: '"'
       scope: punctuation.definition.string.begin.html
-      embed: scope:source.js
-      embed_scope: source.js.embedded.vue
+      embed: scope:source.python
+      embed_scope: source.python.embedded.cgx
       escape: '"'
       escape_captures:
         0: punctuation.definition.string.end.html
     - match: "'"
       scope: punctuation.definition.string.begin.html
-      embed: scope:source.js
-      embed_scope: source.js.embedded.vue
+      embed: scope:source.python
+      embed_scope: source.python.embedded.cgx
       escape: "'"
       escape_captures:
         0: punctuation.definition.string.end.html
