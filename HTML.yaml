@@ -119,7 +119,7 @@ contexts:
         0: meta.tag.script.begin.html
         1: punctuation.definition.tag.begin.html
         2: entity.name.tag.script.html
-      push: script-javascript
+      push: script-python
     - match: (</?)((?i:body|head|html)\b)
       captures:
         1: punctuation.definition.tag.begin.html
@@ -319,6 +319,18 @@ contexts:
           embed_scope: source.js.embedded.html
           escape: (?i)(?=(?:-->\s*)?</script)
 
+  script-python:
+    - meta_content_scope: meta.tag.script.begin.html
+    - include: script-common
+    - match: '>'
+      scope: punctuation.definition.tag.end.html
+      set:
+        - include: script-close-tag
+        - match: (?=\S)
+          embed: scope:source.python
+          embed_scope: source.python.embedded.html
+          escape: (?i)(?=(?:-->\s*)?</script)
+
   script-html:
     - meta_content_scope: meta.tag.script.begin.html
     - include: script-common
@@ -368,7 +380,7 @@ contexts:
             - meta_content_scope: meta.tag.script.begin.html meta.attribute-with-value.html
             - include: script-type-decider
         - match: (?=\S)
-          set: script-javascript
+          set: script-python
 
   script-type-decider:
     - match: (?i)(?={{javascript_mime_type}}(?!{{unquoted_attribute_value}})|'{{javascript_mime_type}}'|"{{javascript_mime_type}}")
@@ -383,7 +395,7 @@ contexts:
         - tag-generic-attribute-value
     - match: (?i)(?=>|''|"")
       set:
-        - script-javascript
+        - script-python
         - tag-generic-attribute-meta
         - tag-generic-attribute-value
     - match: (?i)(?=text/html(?!{{unquoted_attribute_value}})|'text/html'|"text/html")
