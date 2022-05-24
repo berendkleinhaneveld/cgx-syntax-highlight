@@ -1,7 +1,5 @@
 # Collagraph Syntax Highlight
 
-**Note**: the `new` branch hosts the new syntax that only works in Sublime build > 3153. For the old syntax, see `master` branch.
-
 Sublime Text Syntax highlighting for single-file [Collagraph](https://github.com/fork-tongue/collagraph) components.
 
 <!-- TODO: update screenshot with Collagraph example -->
