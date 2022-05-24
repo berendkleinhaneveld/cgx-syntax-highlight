@@ -2,9 +2,8 @@
 
 Sublime Text Syntax highlighting for single-file [Collagraph](https://github.com/fork-tongue/collagraph) components.
 
-<!-- TODO: update screenshot with Collagraph example -->
 <p align="center">
-  <img width="809px" src="https://raw.githubusercontent.com/vuejs/vue-syntax-highlight/new/samples/screenshot.png">
+  <img width="659px" src="https://raw.githubusercontent.com/berendkleinhaneveld/cgx-syntax-highlight/master/samples/screenshot.png">
 </p>
 
 
