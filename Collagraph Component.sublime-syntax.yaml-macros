@@ -3,7 +3,7 @@
 ---
 !extend
 _base: HTML.yaml
-name: Vue Component
+name: Collagraph Component
 scope: text.html.vue
 hidden: false
 file_extensions: [vue]
