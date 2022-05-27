@@ -3,7 +3,7 @@
 Sublime Text Syntax highlighting for single-file [Collagraph](https://github.com/fork-tongue/collagraph) components.
 
 <p align="center">
-  <img width="659px" src="https://raw.githubusercontent.com/berendkleinhaneveld/cgx-syntax-highlight/master/samples/screenshot.png">
+  <img width="554px" src="https://raw.githubusercontent.com/fork-tongue/cgx-syntax-highlight/master/samples/screenshot.png">
 </p>
 
 
